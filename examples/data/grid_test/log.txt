@@ -1,0 +1,5 @@
+[16:45:50]: Initialize experiment at data/grid_test
+[16:45:51]: Starting experiment with 1 trials
+[16:50:10]: Found 1 pre-existing trials in experiment directory.
+[16:50:10]: Initialize experiment at data/grid_test
+[16:50:10]: Starting experiment with 1 trials

@@ -16,7 +16,7 @@ end
 # Experiment from physical constant
 function Experiment(path::String, ntrials::Int64, pc::PhysicalConst, timestamp::Bool)
   dc = DimensionlessConst(pc)
-  writeConstants(joinpath(path,"param.dat"), pc)
+#  writeConstants(joinpath(path,"param.dat"), pc)
   return Experiment(path, ntrials, dc, timestamp)
 end
 

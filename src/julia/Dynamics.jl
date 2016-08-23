@@ -1,6 +1,8 @@
-# Calculate and apply all forces between particles
-# Params
-#   s - The physical system
+"""
+Calculate and apply all types forces between particles
+	Params
+	s - The physical system
+"""
 function forceCalc(s::System)
 
   for p in s.parts
@@ -22,6 +24,11 @@ function forceCalc(s::System)
   for p in s.parts
     # Update velocities from components
     p.vel = p.brn + p.prp + p.adh + p.rep
+#    println(p.brn)
+#    println(s.dimConst.pretrad)
+#     println(p.prp)
+#     println(p.adh)
+#    println(p.rep)
 
     newpos = p.pos + p.vel*s.dimConst.dt
     dist2 = newpos[1]^2 + newpos[2]^2 + newpos[3]^2
@@ -117,7 +124,8 @@ function repF(dc::DimensionlessConst, p1::Part, p2::Part)
       # Force vector
       f *= [ sin(thet)*cos(phi),  sin(thet)*sin(phi), cos(thet) ]
       if( p1.sp != p2.sp)   # Different species interacting
-        f *= 2*dc.rep[p1.sp]*dc.rep[p2.sp]/(dc.rep[p1.sp]+dc.rep[p2.sp])
+      f *= 2*dc.rep[p1.sp]*dc.rep[p2.sp]/(dc.rep[p1.sp]+dc.rep[p2.sp])
+#        f *=200000*dc.rep[p1.sp]*dc.rep[p2.sp]/(dc.rep[p1.sp]+dc.rep[p2.sp])
       else
         f *= dc.rep[p1.sp]
       end
@@ -144,14 +152,15 @@ function adhF(dc::DimensionlessConst, p1::Part, p2::Part)
       # Magnitude of force normalized to 1
       f = 0.0
       if( dc.dia < d < dc.dia*(1 + 2*dc.contact))
-        f = abs(d - (dc.dia + dc.contact))/dc.contact - 1
+#        f = abs(d - (dc.dia + dc.contact))/dc.contact - 1
+         f = -1
       end
       # Force vector
       f *= [ sin(thet)*cos(phi),  sin(thet)*sin(phi), cos(thet) ]
       if( p1.sp == p2.sp)
         f *= dc.adh[p1.sp]
       elseif( p1.sp != p2.sp )
-        f *= dc.adh[3]  # Inter species adhesion
+        f *=  dc.adh[3]  # Inter species adhesion
       end
       p1.adh += f
       p2.adh -= f

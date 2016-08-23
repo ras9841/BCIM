@@ -1,3 +1,8 @@
+"""
+Sets up BCs for the cell and the physical domain. Also sets up
+constants and length scales to be used later.
+"""
+
 abstract System
 
 type Sphere <: System

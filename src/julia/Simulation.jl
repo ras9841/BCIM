@@ -1,3 +1,8 @@
+"""
+Sets up the simulation:
+- Run the system for k steps then take data.
+"""
+
 type Simulation
   path::ASCIIString
   s::System

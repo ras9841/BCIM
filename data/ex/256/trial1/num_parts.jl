@@ -9,10 +9,9 @@ include("../src/julia/BCIM.jl")
 sleep(rand()*10)
 
 # Our physical constants
-# sp1:= species 1, sp2 = species 2
 pc = BCIM.PhysicalConst(  1.0e-3,           # dt
                           # Packing fraction
-                          0.90,
+                          0.80,
                           # so unit length cube dia/root(0.8)
                           # Eta
                           1.00,
@@ -21,13 +20,13 @@ pc = BCIM.PhysicalConst(  1.0e-3,           # dt
                           # Boltzmann constant
                           1.38e-16,
                           # Propulsisions [ sp1, sp2 ]
-                          [0.0,1.0e0],
+                          [0.0,1.0e1],
                           # Repulsions [ sp1, sp2 ]
                           [1.5e4,1.5e3],
                           # Adhesions [ sp1, sp2, sp1-sp2 ]
                           # Adehsion force = pi gamma dia 
                           # 3.14 *45 dyne/cm * 15* 10-4 cm
-                          [10.0e0, 9.0e0, 1.0e0],
+                          [5.0e0, 4.5e0, 0.5e0],
                           # Cell division time ( 0 = no division)
                           [ 0.0, 0.0 ],
                           # Efective adhesive contact distance

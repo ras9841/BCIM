@@ -28,7 +28,7 @@ function Log(stream::IOStream)
 end
 
 function log(l::Log, output::String)
-  t = TmStruct(time())
+  t = Base.Libc.TmStruct(time())
   str = ""
   tstr = string("[",t.hour,":",t.min,":",t.sec,"]:")
   if(nprocs() > 1)
