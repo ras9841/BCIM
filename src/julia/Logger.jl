@@ -9,14 +9,14 @@ type Log
   verbose::Bool
 end
 
-function Log(path::String)
+function Log(path::AbstractString)
   if(!isdir(dirname(path)))
     mkpath(dirname(path))
   end
   return Log(open(path, "a"), true)
 end
 
-function Log(path::String, verbose)
+function Log(path::AbstractString, verbose)
   if(!isdir(dirname(path)))
     mkpath(dirname(path))
   end
@@ -27,7 +27,7 @@ function Log(stream::IOStream)
   return Log(stream, true)
 end
 
-function log(l::Log, output::String)
+function log(l::Log, output::AbstractString)
   t = Base.Libc.TmStruct(time())
   str = ""
   tstr = string("[",t.hour,":",t.min,":",t.sec,"]:")

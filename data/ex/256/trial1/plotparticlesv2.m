@@ -33,6 +33,6 @@ bubbleplot3(x2,y2,z2,r2,[1 0 0],0.9);
 camlight right; lighting phong; view(60,30);
 %axis off
 title(t)
-pause(0.01);
+pause(5);
 clear;close;
 end;

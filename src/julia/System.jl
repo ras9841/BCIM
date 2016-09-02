@@ -73,7 +73,7 @@ function initCells(dc::DimensionlessConst)
   # The minimum size of the cells
   cellSize = dc.dia*(2*dc.contact+1.0)
   # The minimum number of cells of the given size
-  cellNum = int(2*dc.size/cellSize)
+  cellNum = round(Int64, 2*dc.size/cellSize)
   # The actual size of the cells
   cellSize = 2*dc.size/cellNum
   c = constructCells(cellNum, cellSize)
@@ -86,9 +86,9 @@ function initCells(w::Float64, l::Float64, h::Float64, dc::DimensionlessConst)
   # Minimium cell size
   cellSize = dc.dia*(2*dc.contact+1.0)
   # Number of cells along each dimension
-  D = int(w/cellSize)
-  E = int(l/cellSize)
-  F = int(h/cellSize)
+  D = round(Int64, w/cellSize)
+  E = round(Int64, l/cellSize)
+  F = round(Int64, h/cellSize)
   c = constructCells(D, E, F, cellSize)
   return c
 end
@@ -115,7 +115,7 @@ function constructCells(D::Int, E::Int, F::Int, cellSize::Float64)
           for c in -1:1
             for r in -1:1
               if( !(d == 0 && c == 0 && r == 0) )
-                if(getNeighbor(cells, row+r, col+c, dep+d, D, E, F) != None)
+                if(getNeighbor(cells, row+r, col+c, dep+d, D, E, F) != Union{})
                   push!(n, getNeighbor(cells, row+r, col+c, dep+d, D, E, F))   # Beautiful
                 end
               end
@@ -137,12 +137,12 @@ end
 #   dep - The depth cordinate
 #   D - The number of cells per dimension
 # Returns:
-#   A cell or None if request coord is out of bounds
+#   A cell or Union{} if request coord is out of bounds
 function getNeighbor( cells::Array{Cell}, row, col, dep, D, E, F )
   if( row > 0 && col > 0 && dep > 0 && row <= D && col <= E && dep <= F)
     return cells[row, col, dep]
   else
-    return None
+    return Union{}
   end
 end
 
@@ -162,7 +162,7 @@ function assignParts(s::System)
     pos = p.pos + [s.dimConst.size, s.dimConst.size, s.dimConst.size]
     hash = (div(pos[1], cSize) + div(pos[2], cSize)*s.cellGrid.cellNum[2]
             + div(pos[3], cSize)*s.cellGrid.cellNum[3]^2 + 1)
-    hash = int(hash)
+    hash = round(Int64, hash)
     push!(s.cellGrid.cells[hash].parts, p)
   end
 end

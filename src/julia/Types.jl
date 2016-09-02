@@ -100,8 +100,8 @@ function DimensionlessConst(pc::PhysicalConst)
   rep = pc.rep
   contact = contact
   adh = pc.adh
-  pretrad = sqrt(2.0*diffus/dt)
-  prerotd = sqrt(2.0*rotdiffus*dt)
+  pretrad = sqrt(6.0*diffus/dt)
+  prerotd = sqrt(6.0*rotdiffus*dt)
   div = pc.div/utime
 
   return DimensionlessConst(

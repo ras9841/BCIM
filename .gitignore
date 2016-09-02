@@ -7,3 +7,4 @@ site/develop_server.sh
 *.png
 *.dat
 *.swp
+*.txt

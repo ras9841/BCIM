@@ -21,13 +21,13 @@ pc = BCIM.PhysicalConst(  1.0e-3,           # dt
                           # Boltzmann constant
                           1.38e-16,
                           # Propulsisions [ sp1, sp2 ]
-                          [0.0,1.0e0],
+                          [1e-2, 1e-2],
                           # Repulsions [ sp1, sp2 ]
-                          [1.5e4,1.5e3],
+                          [1.5e4, 1.5e2],
                           # Adhesions [ sp1, sp2, sp1-sp2 ]
                           # Adehsion force = pi gamma dia 
                           # 3.14 *45 dyne/cm * 15* 10-4 cm
-                          [10.0e0, 9.0e0, 1.0e0],
+                          [0e0, 0e0, 0e0],
                           # Cell division time ( 0 = no division)
                           [ 0.0, 0.0 ],
                           # Efective adhesive contact distance
@@ -40,14 +40,14 @@ pc = BCIM.PhysicalConst(  1.0e-3,           # dt
 ##### 256 particles total
 pc.npart = [128, 128]
 # Initialize experiment with 3 trials in given directory with desired constants
-exp = BCIM.Experiment("../data/ex/256", 1, pc, true)
+exp = BCIM.Experiment("../data/elastic", 5, pc, false)
 
 # Run the experiment
 # Equilibriate for 1000 steps
 # Collect every 1000 steps
 # Run for 100000 steps
 #BCIM.run(exp, 10000:5000:700000)
-BCIM.run(exp, 1000:500:70000)
+BCIM.run(exp, 10000:5000:700000)
 
 ##### Run again for 512 particles total
 #pc.npart = [256, 256]

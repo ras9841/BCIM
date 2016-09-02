@@ -11,13 +11,13 @@
 #   parts - particle species array
 #   t - time when data is being recorded
 #   spec - which species to write
-function writeParts(filen::String, parts::Array{Part}, t=0.0, spec=0)
+function writeParts(filen::AbstractString, parts::Array{Part}, t=0.0, spec=0)
   # Make file structure if it doesn't exist
   if(!isdir(dirname(filen)))
     mkpath(dirname(filen))
   end
   f = open("$(filen).dat","a+")
-  println(f,"### [ time species pos... vel... ang... sqd")
+  println(f,"% [ time species pos... vel... ang... sqd")
   for p in parts 
     println(f, "$t $(p)")
   end
@@ -26,7 +26,7 @@ end
 
 
 # Write physical parameters to file
-function writeConstants(path::String, pc::PhysicalConst)
+function writeConstants(path::AbstractString, pc::PhysicalConst)
   f = open(path, "a")
   println(f, "dt\t$(pc.dt)")
   println(f, "phi\t$(pc.phi)")
@@ -48,7 +48,7 @@ function writeConstants(path::String, pc::PhysicalConst)
 end
 
 # Write dimensionless parameters to file
-function writeConstants(path::String, dc::DimensionlessConst)
+function writeConstants(path::AbstractString, dc::DimensionlessConst)
   f = open(path, "a")
   println(f, "dt\t$(dc.dt)")
   println(f, "phi\t$(dc.phi)")
@@ -81,13 +81,13 @@ end
 # Params
 #   filen - the file to write to
 #   msd - msd data [ time msd... ]
-function writeMSD(filen::String, msd)
+function writeMSD(filen::AbstractString, msd)
   if(!isdir(dirname(filen)))
     mkpath(dirname(filen))
   end
 
   f = open("$(filen).dat", "w")
-  write(f, "# [ time  msd... ]\n")
+  write(f, "% [ time  msd... ]\n")
   writedlm(f, msd, ' ')
   close(f)
 end

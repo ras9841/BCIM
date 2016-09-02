@@ -36,7 +36,7 @@ function run(sim::Simulation, r::Range{Int})
   freq = r.step
   nsteps = last(r)
 
-  ndata = int(nsteps/freq)
+  ndata = round(Int64, nsteps/freq)
   avgmsd = zeros(Float64, ndata, size(sim.dimConst.npart, 1)+1)
 
   tic()
@@ -70,17 +70,17 @@ function run(sim::Simulation, r::Range{Int})
     # Collect data
     if(s%freq == 0)
       print("[")
-      print("#"^int(s/nsteps*70))
-      print("-"^(70-int(s/nsteps*70)))
-      print("] $(int(s/nsteps*100))%\r")
-      #print("\r\t"^(myid()*3))
-      #print("$(myid()): $(int(s/conf["nsteps"]*100))%   ")
+      print("#"^round(Int64, s/nsteps*70))
+      print("-"^(70-round(Int64, s/nsteps*70)))
+      print("] $(round(Int64, s/nsteps*100))%\r")
+      #print"\r\t"^(myid()*3))
+      #print"$(myid()): $(round(Int64, s/conf["nsteps"]*100))%   ")
 
       t = s*sim.dimConst.dt
       writeParts(joinpath(sim.path, "parts"), sim.s.parts, t)
 
-      avgmsd[int(s/freq), 1] = t
-      avgmsd[int(s/freq), 2:end] = avgMSD(sim.dimConst, sim.s.parts)
+      avgmsd[round(Int64, s/freq), 1] = t
+      avgmsd[round(Int64, s/freq), 2:end] = avgMSD(sim.dimConst, sim.s.parts)
 
     end
   end

@@ -75,6 +75,8 @@ function prop(s::System)
     vz = v*u
     # Update particle velocity
     p.prp += [ vx, vy, vz ]
+    ### SET FOR SPP CHECK ###
+    #p.prp += [ v, v, v ] 
   end
 end
 
