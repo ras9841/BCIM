@@ -51,7 +51,7 @@ end
 # ie rotate earch particle then apply a random force in that direction
 # Params
 #   s - The physical system
-function brownian(s::System)
+function brownian(s::System)    
   # Iterate each particle
   for p in s.parts 
     # Add some normal velocity

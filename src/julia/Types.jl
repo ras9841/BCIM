@@ -92,7 +92,6 @@ function DimensionlessConst(pc::PhysicalConst)
   ulength = pc.dia
   uenergy = pc.boltz*pc.temp
   diffus = pc.diffus*utime/(ulength^2)
-  diffus=0.01*diffus
   rotdiffus = 3*diffus
   dia = pc.dia./ulength
   size = sqrt((dia/2.0)^2*sum(pc.npart)/pc.phi)

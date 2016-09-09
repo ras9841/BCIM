@@ -39,16 +39,21 @@ pc = BCIM.PhysicalConst(  1.0e-3,           # dt
 
 ##### 256 particles total
 pc.npart = [128, 128]
+
+##### Set number of experiments to run.
+nexps = 5;
+
 # Initialize experiment with 3 trials in given directory with desired constants
-exp = BCIM.Experiment("../data/ex/256", 1, pc, true)
-
-# Run the experiment
-# Equilibriate for 1000 steps
-# Collect every 1000 steps
-# Run for 100000 steps
-#BCIM.run(exp, 10000:5000:700000)
-BCIM.run(exp, 10000:5000:700000)
-
+for test in 1:nexps
+    srand(3435)
+    exp = BCIM.Experiment("../data/diff/test$test", 1, pc, true)
+    # Run the experiment
+    # Equilibriate for 1000 steps
+    # Collect every 1000 steps
+    # Run for 100000 steps
+    BCIM.run(exp, 1:5:50)
+    #BCIM.run(exp, 10000:5000:700000)
+end
 ##### Run again for 512 particles total
 #pc.npart = [256, 256]
 #exp = BCIM.Experiment("data/ex/512", 1, pc, false)
