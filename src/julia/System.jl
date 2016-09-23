@@ -89,21 +89,27 @@ function uniformSphere(dc::DimensionlessConst)
     srand(1)
     rho = Array(Float64, 2, num)
     rho[1,:] = sqrt((R^3*(rand(1,num)*(3/R)))/3)
-    rho[2,:] = rho[1,:]
+    srand(4)
+    #rho[2,:] = rho[1,:]
+    rho[2,:] = sqrt((R^3*(rand(1,num)*(3/R)))/3)
 
     # Generate theta
     srand(2)
     theta = Array(Float64, 2, num)
     theta[1,:] = asin(rand(1,num)*2-1)+pi/2
-    theta[2,:] = theta[1,:]
+    srand(5)
+    #theta[2,:] = theta[1,:]
+    theta[2,:] = asin(rand(1,num)*2-1)+pi/2
 
     # Generate phi
     srand(3)
     phi = Array(Float64, 2, num)
     phi[1,:] = rand(1,num)*2*pi 
-    phi[2,:] = phi[1,:]
+    srand(6)
+    #phi[2,:] = phi[1,:]
+    phi[2,:] = rand(1,num)*2*pi 
 
-    srand(4)
+    srand(7)
     p_id = 1
     for sp in 1:length(dc.npart)
         for p in 1:dc.npart[sp]
@@ -250,7 +256,7 @@ function assignParts(s::System)
     pos = p.pos + [s.dimConst.size, s.dimConst.size, s.dimConst.size]
     hash = div(pos[1], cSize) + div(pos[2], cSize)*s.cellGrid.cellNum[2]
             + div(pos[3], cSize)*s.cellGrid.cellNum[3]^2 + 1
-    hash = convert(Int64, hash)
+    hash = convert(Int64, hash) + 1
     push!(s.cellGrid.cells[hash].parts, p)
   end
 end
