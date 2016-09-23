@@ -251,7 +251,6 @@ function assignParts(s::System)
 
   for count in 1:length(s.parts)
     p = s.parts[count]
-    print("count: $count\t $(p.pos)\n")
     # Transpose to positive coords
     pos = p.pos + [s.dimConst.size, s.dimConst.size, s.dimConst.size]
     hash = div(pos[1], cSize) + div(pos[2], cSize)*s.cellGrid.cellNum[2]

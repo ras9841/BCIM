@@ -44,14 +44,7 @@ function run(sim::Simulation, r::Range{Int})
   for neq in 1:nequil
     # Update cells
     if(neq%10 == 1)
-        print("###$neq\n")  
-        print("$(sim.s.cellGrid.cells)\n")  
-
-        for p in sim.s.parts
-            print("$(p)\n")  
-        end
         assignParts(sim.s)
-
     end
     # Step
     step(sim.s)
@@ -80,8 +73,6 @@ function run(sim::Simulation, r::Range{Int})
       print("#"^round(Int64, s/nsteps*70))
       print("-"^(70-round(Int64, s/nsteps*70)))
       print("] $(round(Int64, s/nsteps*100))%\r")
-      #print"\r\t"^(myid()*3))
-      #print"$(myid()): $(round(Int64, s/conf["nsteps"]*100))%   ")
 
       t = s*sim.dimConst.dt
       writeParts(joinpath(sim.path, "parts"), sim.s.parts, t)
