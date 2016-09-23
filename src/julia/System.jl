@@ -35,9 +35,93 @@ function Cylinder(dc::DimensionlessConst)
   return Cylinder(p, c, dc, r, h)
 end
 
+#=
 function uniformSphere(dc::DimensionlessConst)
+    total_parts = round(Int, sum(dc.npart)/2)
+
+    rho = Array{Float64}(2, total_parts)
+    theta = Array{Float64}(2, total_parts)
+    phi = Array{Float64}(2, total_parts)
+  
+    srand(3)
+    rho[1,:] = [dc.size*cbrt(a) for a in rand(total_parts)]
+    rho[2,:] = rho[1,:]
+   
+    srand(4)
+    theta[1,:] = acos(2*rand(total_parts)-1)
+    theta[2,:] = theta[1,:] 
+    
+    srand(5)
+    phi[1,:] = 2*pi*rand(total_parts)
+    phi[2,:] = phi[1,:]
+    
+    srand(1)
+
+    parts = Array{Part}(2*total_parts)
+    pl = 1 # counter for particle ID
+    for sp in 1:length(dc.npart)
+        for p in 1:dc.npart[sp]
+            x = rho[sp,p]*cos(phi[sp,p])*sin(theta[sp,p])
+            y = rho[sp,p]*sin(phi[sp,p])*sin(theta[sp,p])
+            z = rho[sp,p]*cos(theta[sp,p])
+            # This creates a uniform distribution in the sphere
+            
+            #print("i: $pl \t $x \t$y \t $z \n")
+            
+            parts[pl] = Part(pl, sp, [x, y, z], [0, 0, 0],
+                             2*pi*rand(2), rand()*dc.div[sp])
+            pl += 1
+        end
+    end
+  print("parts is $(size(parts))\n")
+  return parts
+end
+=#
+
+### Configured
+function uniformSphere(dc::DimensionlessConst)
+    parts = Array(Part,sum(dc.npart))
+ 
+    R = dc.size;
+    num = dc.npart[1];
+
+    # Generate rho
+    srand(1)
+    rho = Array(Float64, 2, num)
+    rho[1,:] = sqrt((R^3*(rand(1,num)*(3/R)))/3)
+    rho[2,:] = rho[1,:]
+
+    # Generate theta
+    srand(2)
+    theta = Array(Float64, 2, num)
+    theta[1,:] = asin(rand(1,num)*2-1)+pi/2
+    theta[2,:] = theta[1,:]
+
+    # Generate phi
+    srand(3)
+    phi = Array(Float64, 2, num)
+    phi[1,:] = rand(1,num)*2*pi 
+    phi[2,:] = phi[1,:]
+
+    srand(4)
+    p_id = 1
+    for sp in 1:length(dc.npart)
+        for p in 1:dc.npart[sp]
+            # This creates a uniform distribution in the sphere
+            x = rho[sp,p]*cos(phi[sp,p])*sin(theta[sp,p])
+            y = rho[sp,p]*sin(phi[sp,p])*sin(theta[sp,p])
+            z = rho[sp,p]*cos(theta[sp,p])
+            xyz = [ x, y, z ]
+            parts[p_id] = Part(p_id, sp, xyz, [0, 0, 0], 2*pi*rand(2), rand()*dc.div[sp])
+            p_id += 1
+        end
+    end
+    return parts
+end
+
+function uniformSphere2(dc::DimensionlessConst)
   parts = Array(Part,sum(dc.npart))
-  pl = 1
+  pl = 1 # counter for particle ID
   for sp in 1:length(dc.npart)
     for p in 1:dc.npart[sp]
       # This creates a uniform distribution in the sphere
@@ -49,6 +133,7 @@ function uniformSphere(dc::DimensionlessConst)
       pl += 1
     end
   end
+  print("$parts\t$(typeof(parts))\n")
   return parts
 end
 
@@ -157,12 +242,15 @@ function assignParts(s::System)
   for c in s.cellGrid.cells
     c.parts = Array(Part, 0)
   end
-  for p in s.parts
+
+  for count in 1:length(s.parts)
+    p = s.parts[count]
+    print("count: $count\t $(p.pos)\n")
     # Transpose to positive coords
     pos = p.pos + [s.dimConst.size, s.dimConst.size, s.dimConst.size]
-    hash = (div(pos[1], cSize) + div(pos[2], cSize)*s.cellGrid.cellNum[2]
-            + div(pos[3], cSize)*s.cellGrid.cellNum[3]^2 + 1)
-    hash = round(Int64, hash)
+    hash = div(pos[1], cSize) + div(pos[2], cSize)*s.cellGrid.cellNum[2]
+            + div(pos[3], cSize)*s.cellGrid.cellNum[3]^2 + 1
+    hash = convert(Int64, hash)
     push!(s.cellGrid.cells[hash].parts, p)
   end
 end
@@ -179,7 +267,7 @@ end
 function divide(s::System)
   if( maximum(s.dimConst.div) > 0.0)
     for p in s.parts
-      # Should the cell be divided
+    # Should the cell be divided
       if rand() < div_prob( p.div, s.dimConst.div[p.sp] )
         p.div = 0
         part = deepcopy(p)

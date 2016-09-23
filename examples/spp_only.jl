@@ -10,7 +10,7 @@ sleep(rand()*10)
 
 # Our physical constants
 # sp1:= species 1, sp2 = species 2
-pc = BCIM.PhysicalConst(  1.0e-3,           # dt
+pc = BCIM.PhysicalConst(  1.0e-5,           # dt
                           # Packing fraction
                           0.50,
                           # so unit length cube dia/root(0.8)
@@ -39,15 +39,16 @@ pc = BCIM.PhysicalConst(  1.0e-3,           # dt
 
 ##### 256 particles total
 pc.npart = [128, 128]
+test = 1
 # Initialize experiment with 3 trials in given directory with desired constants
-exp = BCIM.Experiment("../data/ex/256", 1, pc, true)
+exp = BCIM.Experiment("data/repulsion/test$test", 1, pc, true)
 
 # Run the experiment
 # Equilibriate for 1000 steps
 # Collect every 1000 steps
 # Run for 100000 steps
 #BCIM.run(exp, 10000:5000:700000)
-BCIM.run(exp, 10000:5000:700000)
+BCIM.run(exp, 10000:50000:700000)
 
 ##### Run again for 512 particles total
 #pc.npart = [256, 256]

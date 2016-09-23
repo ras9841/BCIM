@@ -28,7 +28,7 @@ end
 
 function PhysicalConst(
               dt::Float64,
-              phi::Float64,
+              phi::Float64, #packing fraction
               eta::Float64,
               temp::Float64,
               boltz::Float64,
@@ -39,7 +39,8 @@ function PhysicalConst(
               contact::Float64,
               dia::Float64,
               npart::Array{Int64,1})
-  diff = boltz*temp/(3*pi*eta*dia)
+  #diff = boltz*temp/(3*pi*eta*dia)
+  diff = 2e-8/60
   rotdiff = 31.6*boltz*temp/(pi*eta*dia^3)
 #   rotdiff = boltz*temp/(pi*eta*dia^3)
   return PhysicalConst(
@@ -94,8 +95,9 @@ function DimensionlessConst(pc::PhysicalConst)
   diffus = pc.diffus*utime/(ulength^2)
   rotdiffus = 3*diffus
   dia = pc.dia./ulength
-  size = sqrt((dia/2.0)^2*sum(pc.npart)/pc.phi)
-  dt = pc.dt
+  #size = sqrt((dia/2.0)^2*sum(pc.npart)/pc.phi)
+  size = cbrt(sum(pc.npart))*(dia/2) # radius of bounding sphere
+  dt = pc.dt/utime #nondimensionalize dt
   rep = pc.rep
   contact = contact
   adh = pc.adh

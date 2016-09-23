@@ -41,10 +41,17 @@ function run(sim::Simulation, r::Range{Int})
 
   tic()
   # Equilibriate
-  for s in 1:nequil
+  for neq in 1:nequil
     # Update cells
-    if(s%10 == 1)
-      assignParts(sim.s)
+    if(neq%10 == 1)
+        print("###$neq\n")  
+        print("$(sim.s.cellGrid.cells)\n")  
+
+        for p in sim.s.parts
+            print("$(p)\n")  
+        end
+        assignParts(sim.s)
+
     end
     # Step
     step(sim.s)
