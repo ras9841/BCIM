@@ -65,8 +65,8 @@ end
 function prop(s::System)
   # Iterate each particle
   for p in s.parts
-    p.ang[1] += s.dimConst.rotdiffus*randn() % (2*pi)
-    p.ang[2] += s.dimConst.rotdiffus*randn() % (2*pi)
+    p.ang[1] += s.dimConst.prerotd*randn() % (pi)
+    p.ang[2] += s.dimConst.prerotd*randn() % (2*pi)
     # Determine velocity components
     v = abs(s.dimConst.prop[p.sp])
     u = cos(p.ang[1])

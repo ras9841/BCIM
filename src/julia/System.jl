@@ -82,7 +82,7 @@ end
 function uniformSphere(dc::DimensionlessConst)
     parts = Array(Part,sum(dc.npart))
  
-    R = dc.size;
+    R = dc.size/2;
     num = dc.npart[1];
 
     # Generate rho
@@ -118,7 +118,10 @@ function uniformSphere(dc::DimensionlessConst)
             y = rho[sp,p]*sin(phi[sp,p])*sin(theta[sp,p])
             z = rho[sp,p]*cos(theta[sp,p])
             xyz = [ x, y, z ]
-            parts[p_id] = Part(p_id, sp, xyz, [0, 0, 0], 2*pi*rand(2), rand()*dc.div[sp])
+	    angtheta = pi*rand(1);
+	    angphi = 2*pi*rand(2);	
+	    ang = [angtheta, angphi]
+            parts[p_id] = Part(p_id, sp, xyz, [0, 0, 0], ang, rand()*dc.div[sp])
             p_id += 1
         end
     end

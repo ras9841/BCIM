@@ -6,5 +6,5 @@ function avgMSD(dc::DimensionlessConst, parts::Array)
     d = (p.pos - p.org)
     sqdtot[p.sp] += sum((d).^2)
   end
-  return sqdtot ./ float(sum(dc.npart))
+  return sqdtot ./ float(dc.npart[1])
 end
