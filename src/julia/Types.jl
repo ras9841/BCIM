@@ -24,40 +24,42 @@ type PhysicalConst
   
   rotdiffus::Float64
   diffus::Float64
+  bseed::Int64
 end
 
 function PhysicalConst(
-              dt::Float64,
-              phi::Float64, #packing fraction
-              eta::Float64,
-              temp::Float64,
-              boltz::Float64,
-              prop::Array{Float64,1},
-              rep::Array{Float64,1},
-              adh::Array{Float64,1},
-              div::Array{Float64,1},
-              contact::Float64,
-              dia::Float64,
-              npart::Array{Int64,1})
-  #diff = boltz*temp/(3*pi*eta*dia)
+            dt::Float64,
+            phi::Float64, #packing fraction
+            eta::Float64,
+            temp::Float64,
+            boltz::Float64,
+            prop::Array{Float64,1},
+            rep::Array{Float64,1},
+            adh::Array{Float64,1},
+            div::Array{Float64,1},
+            contact::Float64,
+            dia::Float64,
+            npart::Array{Int64,1},
+            bseed::Int64)
   diff = 2e-8/60
   rotdiff = 31.6*boltz*temp/(pi*eta*dia^3)
-#   rotdiff = boltz*temp/(pi*eta*dia^3)
   return PhysicalConst(
-              dt,
-              phi,
-              eta,
-              temp,
-              boltz,
-              prop,
-              rep,
-              adh,
-              div,
-              contact,
-              dia,
-              npart,
-              diff,
-              rotdiff)
+            dt,
+            phi,
+            eta,
+            temp,
+            boltz,
+            prop,
+            rep,
+            adh,
+            div,
+            contact,
+            dia,
+            npart,
+            diff,
+            rotdiff,
+            bseed
+            )
 end
 # Holds dimensionless parameters
 type DimensionlessConst
@@ -84,6 +86,8 @@ type DimensionlessConst
   diffus::Float64
   pretrad::Float64
   prerotd::Float64
+
+  bseed::Int64
 end
 
 # Converts physical parameters to dimensionless parameters
@@ -95,7 +99,6 @@ function DimensionlessConst(pc::PhysicalConst)
   diffus = pc.diffus*utime/(ulength^2)
   rotdiffus = 3*diffus
   dia = pc.dia./ulength
-  #size = sqrt((dia/2.0)^2*sum(pc.npart)/pc.phi)
   size = cbrt(sum(pc.npart))*(dia/2) # radius of bounding sphere
   dt = pc.dt/utime #nondimensionalize dt
   rep = pc.rep
@@ -125,7 +128,8 @@ function DimensionlessConst(pc::PhysicalConst)
     rotdiffus,
     diffus,
     pretrad,
-    prerotd)
+    prerotd,
+    pc.bseed)
   end
 
 type Part

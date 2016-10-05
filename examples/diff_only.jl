@@ -1,63 +1,59 @@
-## Runs a experiments for diffrent numbers of particles
-# Each experiment consists of three trials
-# Saves data to data/numparts/ relative to run path
+#=
+    File:       diff_only.jl
+    Author:     Roland Sanford (ras9841@rit.edu)
+    Version:    Julia 0.4
+    Description:
+        Experimental configuration file for the diffusion-only base 
+        case. Here, only diffusion governs the motion of the particles.
+        Results are savec to "data/$(name)/", relative to the run path.
+=#
 
+# Include the BCIM definitioins.
 include("../src/julia/BCIM.jl")
-#using BCIM
 
-# Hack to allow asynchronous experiment runs
-sleep(rand()*10)
+# Set the base simulation seed in range 0 to 100. 
+base_seed = round(Int, rand(1)[1]*100)
 
-# Our physical constants
-# sp1:= species 1, sp2 = species 2
-pc = BCIM.PhysicalConst(  1e-7,           # dt
-                          # Packing fraction
-                          0.50,
-                          # so unit length cube dia/root(0.8)
-                          # Eta
-                          1.00,
-                          # Temperature (K)
-                          310.15,
-                          # Boltzmann constant
-                          1.38e-16,
-                          # Propulsisions [ sp1, sp2 ]
-                          [0.0, 0.0],
-                          # Repulsions [ sp1, sp2 ]
-                          [0.0, 1.0e-12],
-                          # Adhesions  [sp1, sp2, sp1-sp2 ]
-                          # Adehsion force = pi gamma dia 
-                          # 3.14 *45 dyne/cm * 15* 10-4 cm
-                          [0.0, 0.0, 0.0],
-                          # Cell division time ( 0 = no division)
-                          [ 0.0, 0.0 ],
-                          # Efective adhesive contact distance (D)
-                          0.01,
-                          # Cell diameter
-                          15.0e-4,
-                          # Number of particles [ sp1, sp2 ]
-                          [128,128])
+# Define the system's physical constants.
+# Note: sp1 denotes species 1, and sp2 denotes species 2.
+pc = BCIM.PhysicalConst(# Time step (s)  
+                        1e-7,          
+                        # Packing fraction
+                        0.50,
+                        # Eta
+                        1.00,
+                        # Temperature (K)
+                        310.15,
+                        # Boltzmann constant (cgs)
+                        1.38e-16,
+                        # Propulsisions [ sp1, sp2 ] (dynes) 
+                        [0.0, 0.0],
+                        # Repulsions [ sp1, sp2 ] (dynes)
+                        [0.0, 1.0e-12],
+                        # Adhesions  [sp1-sp1, sp2-sp2, sp1-sp2 ] (dynes)
+                        [0.0, 0.0, 0.0],
+                        # Cell division time ( 0 = no division ) (s) 
+                        [0.0, 0.0],
+                        # Efective adhesive contact distance (*D) (cm)
+                        0.01, #prefactor
+                        # Cell diameter (cm)
+                        15.0e-4,
+                        # Number of particles [ sp1, sp2 ]
+                        [128, 128],
+                        # Seed for RNGs
+                        base_seed
+                       )
 
 ##### 256 particles total
 pc.npart = [128, 128]
-#pc.npart = [2, 2]
 
-##### Set number of experiments to run.
-nexps = 5;
-for test in 1:nexps
-    #srand(3435)
-    exp = BCIM.Experiment("data/test_long$(test)", 1, pc, true)
-    # Run the experiment
-    # Equilibriate for 1000 steps
-    # Collect every 1000 steps
-    # Run for 100000 steps
-    BCIM.run(exp, 10000:10000:1000000)
-end
-##### Run again for 512 particles total
-#pc.npart = [256, 256]
-#exp = BCIM.Experiment("data/ex/512", 1, pc, false)
-#BCIM.run(exp, 1000:1000:10000)
+# Base directory for results
+name = "testing"
 
-##### 1024 particles total
-#pc.npart = [512, 512]
-#exp = BCIM.Experiment("data/ex/1024", 1, pc, false)
-#BCIM.run(exp, 1000:1000:10000)
+exp = BCIM.Experiment("data/$(name)", 1, pc, true)
+# Run exp with the conditions a:b:c where
+# - equilibriate every a steps
+# - collect data every b steps
+# - run rxp for c steps
+print("Starting experiment with seed $base_seed.\n")
+BCIM.run(exp, 10000:10000:1000000)

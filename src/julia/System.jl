@@ -35,81 +35,37 @@ function Cylinder(dc::DimensionlessConst)
   return Cylinder(p, c, dc, r, h)
 end
 
-#=
-function uniformSphere(dc::DimensionlessConst)
-    total_parts = round(Int, sum(dc.npart)/2)
-
-    rho = Array{Float64}(2, total_parts)
-    theta = Array{Float64}(2, total_parts)
-    phi = Array{Float64}(2, total_parts)
-  
-    srand(3)
-    rho[1,:] = [dc.size*cbrt(a) for a in rand(total_parts)]
-    rho[2,:] = rho[1,:]
-   
-    srand(4)
-    theta[1,:] = acos(2*rand(total_parts)-1)
-    theta[2,:] = theta[1,:] 
-    
-    srand(5)
-    phi[1,:] = 2*pi*rand(total_parts)
-    phi[2,:] = phi[1,:]
-    
-    srand(1)
-
-    parts = Array{Part}(2*total_parts)
-    pl = 1 # counter for particle ID
-    for sp in 1:length(dc.npart)
-        for p in 1:dc.npart[sp]
-            x = rho[sp,p]*cos(phi[sp,p])*sin(theta[sp,p])
-            y = rho[sp,p]*sin(phi[sp,p])*sin(theta[sp,p])
-            z = rho[sp,p]*cos(theta[sp,p])
-            # This creates a uniform distribution in the sphere
-            
-            #print("i: $pl \t $x \t$y \t $z \n")
-            
-            parts[pl] = Part(pl, sp, [x, y, z], [0, 0, 0],
-                             2*pi*rand(2), rand()*dc.div[sp])
-            pl += 1
-        end
-    end
-  print("parts is $(size(parts))\n")
-  return parts
-end
-=#
-
 ### Configured
 function uniformSphere(dc::DimensionlessConst)
     parts = Array(Part,sum(dc.npart))
- 
+
+    seed = dc.bseed
+
     R = dc.size/2;
     num = dc.npart[1];
 
     # Generate rho
-    srand(1)
+    srand(seed+1)
     rho = Array(Float64, 2, num)
     rho[1,:] = sqrt((R^3*(rand(1,num)*(3/R)))/3)
-    srand(4)
-    #rho[2,:] = rho[1,:]
+    srand(seed+4)
     rho[2,:] = sqrt((R^3*(rand(1,num)*(3/R)))/3)
 
     # Generate theta
-    srand(2)
+    srand(seed+2)
     theta = Array(Float64, 2, num)
     theta[1,:] = asin(rand(1,num)*2-1)+pi/2
-    srand(5)
-    #theta[2,:] = theta[1,:]
+    srand(seed+5)
     theta[2,:] = asin(rand(1,num)*2-1)+pi/2
 
     # Generate phi
-    srand(3)
+    srand(seed+3)
     phi = Array(Float64, 2, num)
     phi[1,:] = rand(1,num)*2*pi 
-    srand(6)
-    #phi[2,:] = phi[1,:]
+    srand(seed+6)
     phi[2,:] = rand(1,num)*2*pi 
 
-    srand(7)
+    srand(seed+7)
     p_id = 1
     for sp in 1:length(dc.npart)
         for p in 1:dc.npart[sp]
@@ -118,32 +74,15 @@ function uniformSphere(dc::DimensionlessConst)
             y = rho[sp,p]*sin(phi[sp,p])*sin(theta[sp,p])
             z = rho[sp,p]*cos(theta[sp,p])
             xyz = [ x, y, z ]
-	    angtheta = pi*rand(1);
-	    angphi = 2*pi*rand(2);	
-	    ang = [angtheta, angphi]
-            parts[p_id] = Part(p_id, sp, xyz, [0, 0, 0], ang, rand()*dc.div[sp])
+            angtheta = pi*rand(1)
+	        angphi = 2*pi*rand(1)
+            ang = [angtheta angphi]
+            div = rand(1)[1]*dc.div[sp]
+            parts[p_id] = Part(p_id, sp, xyz, [0, 0, 0], ang, div)
             p_id += 1
         end
     end
     return parts
-end
-
-function uniformSphere2(dc::DimensionlessConst)
-  parts = Array(Part,sum(dc.npart))
-  pl = 1 # counter for particle ID
-  for sp in 1:length(dc.npart)
-    for p in 1:dc.npart[sp]
-      # This creates a uniform distribution in the sphere
-      lam = (dc.size-dc.dia/2.0)*cbrt(rand())
-      u = 2*rand()-1
-      phi = 2*pi*rand()
-      xyz = [ lam*sqrt(1-u^2)*cos(phi), lam*sqrt(1-u^2)*sin(phi), lam*u ]
-      parts[pl] = Part(pl, sp, xyz, [0, 0, 0], 2*pi*rand(2), rand()*dc.div[sp])
-      pl += 1
-    end
-  end
-  print("$parts\t$(typeof(parts))\n")
-  return parts
 end
 
 # Create a cylinder of particles

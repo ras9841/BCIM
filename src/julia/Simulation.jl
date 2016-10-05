@@ -4,7 +4,7 @@ Sets up the simulation:
 """
 
 type Simulation
-  path::ASCIIString
+  path::String
   s::System
   dimConst::DimensionlessConst
   l::Log
@@ -12,13 +12,13 @@ type Simulation
 end
 
 # Initialize a simulation with given parameters and log file
-function Simulation(dir::ASCIIString, dc::DimensionlessConst, l::Log)
+function Simulation(dir::String, dc::DimensionlessConst, l::Log)
   return Simulation(dir, Sphere(dc), dc, l)
 end
 
 # Uses default folder names of 'trial{id}' inside the given dir
 # Finds the next available id in the given dir and makes a path for it
-function nextPath(dir::ASCIIString)
+function nextPath(dir::String)
   id = 1
   # Find next available id
   while ispath(joinpath(dir, "trial$id"))

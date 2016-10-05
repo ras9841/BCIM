@@ -10,13 +10,12 @@ end
 
 function Experiment(path::AbstractString, ntrials::Int64, pc::PhysicalConst)
   dc = DimensionlessConst(pc)
-  Experiment(path, ntrials, dc, true)
+  Experiment(path, ntrials, dc, baseSeed, true)
 end
 
 # Experiment from physical constant
 function Experiment(path::AbstractString, ntrials::Int64, pc::PhysicalConst, timestamp::Bool)
   dc = DimensionlessConst(pc)
-#  writeConstants(joinpath(path,"param.dat"), pc)
   return Experiment(path, ntrials, dc, timestamp)
 end
 
