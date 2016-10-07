@@ -85,9 +85,11 @@ function run(sim::Simulation, r::Range{Int})
 
     end
   end
-
+  
+  # Put time and space dimesions back into msd
+  msd[:,1] = msd[:,1]*sim.dimConst*utime
+  msd[:,2:3] = msd[:,2:3]*sim.dimConst*ulength^2
   writeMSD(joinpath(sim.path,"msd"), avgmsd)
-
   log(sim.l, "Finished trial in $(toq()) seconds")
 
 end

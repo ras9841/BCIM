@@ -104,8 +104,8 @@ function DimensionlessConst(pc::PhysicalConst)
   rep = pc.rep
   contact = contact
   adh = pc.adh
-  pretrad = sqrt(2.0*diffus/dt)
-  prerotd = sqrt(2.0*rotdiffus*dt)
+  pretrad = sqrt(2.0*diffus/dt)     ### SET TO 0 FOR SPP CHECK ###
+  prerotd = sqrt(2.0*rotdiffus*dt)  ### SET TO 0 FOR SPP CHECK ###
   div = pc.div/utime
 
   return DimensionlessConst(
