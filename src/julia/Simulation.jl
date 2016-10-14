@@ -45,7 +45,6 @@ function run(sim::Simulation, r::Range{Int})
     # Update cells
     if(neq%10 == 1)
         assignParts(sim.s)
-
     end
     # Step
     step(sim.s)

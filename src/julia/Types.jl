@@ -135,9 +135,9 @@ function DimensionlessConst(pc::PhysicalConst)
 type Part
   id::Int
   sp::Int8
-  pos::Array{Float64}
-  vel::Array{Float64}
-  ang::Array{Float64}
+  pos::Array{Float64} #x,y,z
+  vel::Array{Float64} #vx,vy,vz
+  ang::Array{Float64} #theta, phi
   # Division counter (counts number of steps since last division)
   div::Float64
   # The total square distance, used for msd

@@ -238,5 +238,6 @@ end
 
 function step(s::System)
   divide(s::System)
-  forceCalc(s::System)
+  #forceCalc(s::System)
+  rk4solce(s::System)
 end
